@@ -7,6 +7,8 @@ import org.smlions.comfortplant.dto.UpdateUserEmailRequestDTO;
 import org.smlions.comfortplant.dto.UpdateUserNicknameRequestDTO;
 import org.smlions.comfortplant.dto.UpdateUserPasswordRequestDTO;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -33,6 +35,9 @@ public class User {
 
     @Column
     private Long wateringCount;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Plant> plant;
 
     public void updatePassword(UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
         password= updateUserPasswordRequestDTO.getNewPassword();
