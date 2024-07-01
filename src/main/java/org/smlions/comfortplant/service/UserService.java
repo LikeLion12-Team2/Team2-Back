@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+
+
     private final PasswordEncoder passwordEncoder;
     @Transactional
     public UserResponseDTO createUser(CreateUserRequestDto createUserRequestDto){
