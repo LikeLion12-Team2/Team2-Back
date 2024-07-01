@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final ActivityService activityService;
     @Transactional
     public UserResponseDTO createUser(CreateUserRequestDto createUserRequestDto){
 
@@ -27,6 +28,7 @@ public class UserService {
 
         user.setCoin(Long.valueOf(0));
         userRepository.save(user);
+        activityService.addDefaultActivitiesToUser(user);
         return UserResponseDTO.from(user);
 
     }
