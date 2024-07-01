@@ -39,6 +39,7 @@ public class ItemService {
 
 
 
+
     public List<ItemResDto> getItemList(){
         if(itemRepository.count() == 0){
             initDefaultItems();

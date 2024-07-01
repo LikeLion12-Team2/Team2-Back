@@ -39,6 +39,7 @@ public class ItemController {
     public ResponseEntity<?> getItem(@RequestParam("itemId") long itemId){
         try{
             return ResponseEntity.ok(itemService.getItem(itemId));
+
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
         }

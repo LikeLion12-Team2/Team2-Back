@@ -27,6 +27,7 @@ public class Item {
     @Column
     private String detail;
 
+
     @Column
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;

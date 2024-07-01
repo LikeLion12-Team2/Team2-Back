@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class ItemReqDto {
+
     private long itemId;
     private long plantId;
 }
