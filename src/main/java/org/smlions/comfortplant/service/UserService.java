@@ -16,16 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
-
-
-    private final PasswordEncoder passwordEncoder;
     @Transactional
     public UserResponseDTO createUser(CreateUserRequestDto createUserRequestDto){
 
         if(userRepository.existsByEmail(createUserRequestDto.getEmail()))
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
 
-        User user = createUserRequestDto.toEntity(passwordEncoder);
+        User user = createUserRequestDto.toEntity();
 
         user.setWateringCount(Long.valueOf(0));
 

@@ -15,11 +15,10 @@ public class CreateUserRequestDto {
     public String password;
     public String email;
 
-    public User toEntity(PasswordEncoder passwordEncoder) {
-        String encodePassword = passwordEncoder.encode(password);
+    public User toEntity() {
         return User.builder()
                 .nickname(nickname)
-                .password(encodePassword)
+                .password(password)
                 .email(email)
                 .roles("USER")
                 .build();
