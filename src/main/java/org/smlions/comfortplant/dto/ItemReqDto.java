@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 public class ItemReqDto {
     private long itemId;
     private long plantId;
-
 }
