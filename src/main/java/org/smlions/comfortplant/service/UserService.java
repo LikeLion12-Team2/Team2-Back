@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.smlions.comfortplant.domain.entity.User;
 import org.smlions.comfortplant.dto.*;
 import org.smlions.comfortplant.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     @Transactional
     public UserResponseDTO createUser(CreateUserRequestDto createUserRequestDto){
 
         if(userRepository.existsByEmail(createUserRequestDto.getEmail()))
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
 
-        User user = createUserRequestDto.toEntity();
+        User user = createUserRequestDto.toEntity(passwordEncoder);
 
         user.setWateringCount(Long.valueOf(0));
 
