@@ -22,6 +22,10 @@ public class UserService {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
 
         User user = createUserRequestDto.toEntity();
+
+        user.setWateringCount(Long.valueOf(0));
+
+        user.setCoin(Long.valueOf(0));
         userRepository.save(user);
         return UserResponseDTO.from(user);
 
