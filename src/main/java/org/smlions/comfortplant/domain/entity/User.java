@@ -45,6 +45,15 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Watering> watering;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Item> items;
+
+    public void buyItem(Item item){
+        coin -= item.getPrice();
+    }
+
+
     public void updatePassword(UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
         password= updateUserPasswordRequestDTO.getNewPassword();
     }
