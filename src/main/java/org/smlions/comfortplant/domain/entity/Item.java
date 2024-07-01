@@ -31,6 +31,7 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
 
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;

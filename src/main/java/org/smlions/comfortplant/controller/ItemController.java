@@ -29,7 +29,7 @@ public class ItemController {
             return ResponseEntity.status(HttpStatus.OK).body("아이템 구매가 완료되었습니다.\nitemId :"
                                                         + itemReqDto.getItemId()+ "\n"
                                                         + "platnId : " + itemReqDto.getPlantId());
-        }catch (Exception e){
+        }catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
         }
     }
