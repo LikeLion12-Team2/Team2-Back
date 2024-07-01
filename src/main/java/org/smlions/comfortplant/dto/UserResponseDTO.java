@@ -15,11 +15,14 @@ public class UserResponseDTO {
     public String nickname;
     public String email;
 
+    public Long coin;
+
     public static UserResponseDTO from(User user){
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
+                .coin(user.getCoin())
                 .build();
     }
 }

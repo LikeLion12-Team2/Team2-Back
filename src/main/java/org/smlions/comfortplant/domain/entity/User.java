@@ -39,6 +39,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Plant> plant;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Watering> watering;
+
     public void updatePassword(UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
         password= updateUserPasswordRequestDTO.getNewPassword();
     }
@@ -49,6 +52,20 @@ public class User {
 
     public void updateEmail(UpdateUserEmailRequestDTO updateUserEmailRequestDTO){
         email = updateUserEmailRequestDTO.getNewEmail();
+    }
+
+    //물주기 횟수마다 코인 증가
+    public void plusCoin(long count){
+        coin += count;
+    }
+
+    // 스트레스 해소 활동 체크 할때마다 물주기 횟수 증가
+    public void plusWateringCount(){
+        wateringCount += 1;
+    }
+    // 스트레스 해소 활동 체크 취소 할때마다 물주기 횟수 감소
+    public void minusWateringCount() {
+        wateringCount -= 1;
     }
 
 }
