@@ -45,7 +45,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // 일단 PathVariable로 처리하긴 했는데 이게 맞는지 모르겠음
+
     @GetMapping("")
     public ResponseEntity<?> findPassword(@RequestBody FindPasswordRequestDTO findPasswordRequestDTO){
         return ResponseEntity.ok(userService.findPassword(findPasswordRequestDTO));

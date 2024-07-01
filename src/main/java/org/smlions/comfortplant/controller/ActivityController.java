@@ -46,7 +46,22 @@ public class ActivityController {
         }
     }
 
-
+    @PostMapping("/uncheck")
+    public ResponseEntity<?> activityUnheck(@RequestParam("activityId") long activityId) {
+        try {
+            long count = activityService.uncheckActivity(activityId);
+            return ResponseEntity.status(HttpStatus.OK).body("물주기 횟수가 1 감소 했습니다.\nwateringCount: " + count);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (NoSuchElementException e) {
+            System.out.println("NoSuchElementException: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+        }
+    }
 
 
     // 활동 추가
@@ -67,8 +82,12 @@ public class ActivityController {
         try{
             activityService.updateActivity(updateActivityReqDto);
             return ResponseEntity.status(HttpStatus.OK).body("스트레스 해소 활동 수정이 완료되었습니다.");
-        }catch (Exception e){
+        }catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("기본으로 제공되는 스트레스 해소 활동은 수정할 수 없습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("서버 오류가 발생했습니다.");
         }
     }
 
@@ -77,8 +96,12 @@ public class ActivityController {
         try{
             activityService.deleteActivity(activityId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("스트레스 해소 활동 삭제가 완료되었습니다.");
-        }catch (Exception e){
+        }catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("기본으로 제공되는 스트레스 해소 활동은 수정할 수 없습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("서버 오류가 발생했습니다.");
         }
     }
 }

@@ -44,4 +44,7 @@ public class Activity {
     public void check(){
         isDone = true;
     }
+    public void uncheck(){
+        isDone = false;
+    }
 }
