@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.smlions.comfortplant.domain.entity.Plant;
-import org.smlions.comfortplant.domain.entity.Status;
-import org.smlions.comfortplant.domain.entity.Type;
-import org.smlions.comfortplant.domain.entity.User;
+import org.smlions.comfortplant.domain.entity.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +20,9 @@ public class PlantResponseDTO {
     public Long currentExp;
     public String name;
 
+    public String backgroundItem;
+    public String colorItem;
+
     public static PlantResponseDTO from(Plant plant){
         return PlantResponseDTO.builder()
                 .id(plant.getId())
@@ -32,6 +32,8 @@ public class PlantResponseDTO {
                 .totalExp(plant.getTotalExp())
                 .status(plant.getStatus())
                 .name(plant.getName())
+                .backgroundItem(plant.getBackgroundItem())
+                .colorItem(plant.getColorItem())
                 .build();
     }
 }

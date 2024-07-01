@@ -22,6 +22,8 @@ public class Plant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+
     @Column
     private String name;
 
@@ -50,6 +52,14 @@ public class Plant {
     private User user;
 
     private LocalDate localDate;
+
+    // 아이템 관련
+
+    private String backgroundItem;
+    private String colorItem;
+
+
+
 
     @OneToMany(mappedBy = "plant", cascade = CascadeType.ALL)
     private List<WateringAndDateData> wateringAndDateData;
