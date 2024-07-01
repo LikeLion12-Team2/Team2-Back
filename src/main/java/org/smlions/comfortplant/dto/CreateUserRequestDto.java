@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.smlions.comfortplant.domain.entity.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class CreateUserRequestDto {
                 .nickname(nickname)
                 .password(password)
                 .email(email)
+                .roles("USER")
                 .build();
     }
 }

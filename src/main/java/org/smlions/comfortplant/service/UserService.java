@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.smlions.comfortplant.domain.entity.User;
 import org.smlions.comfortplant.dto.*;
 import org.smlions.comfortplant.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

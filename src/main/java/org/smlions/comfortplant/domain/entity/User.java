@@ -36,6 +36,9 @@ public class User {
     @Column
     private Long wateringCount;
 
+    @Column
+    private String roles;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Plant> plant;
 
