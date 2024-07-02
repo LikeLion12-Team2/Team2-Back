@@ -14,6 +14,7 @@ import org.smlions.comfortplant.repository.ActivityRepository;
 import org.smlions.comfortplant.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +42,8 @@ public class ActivityService {
 
     public List<ActivityResDto> getActivityList(String email){
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 유저입니다."));
 
         List<Activity> activities = activityRepository.findActivities(email);
         List<ActivityResDto> activityResDtos = new ArrayList<>();
@@ -68,27 +70,34 @@ public class ActivityService {
 
 
     // 수정 필요!
-    public long checkActivity(long activityId) {
+    public long checkActivity(long activityId, String email) {
         try {
             Activity activity = activityRepository.findById(activityId)
                     .orElseThrow(() -> new NoSuchElementException("존재하지 않는 활동입니다."));
-
+            if(!activity.getUser().getEmail().equals(email)){
+                throw new AccessDeniedException("로그인한 유저와 활동의 유저가 다릅니다.");
+            }
             // 나머지 로직은 그대로 유지
             activity.check();
             User user = activity.getUser();
             user.plusWateringCount();
             return user.getWateringCount();
         } catch (NoSuchElementException e) {
-            throw new IllegalArgumentException("활동을 찾을 수 없습니다.");
+            throw new NoSuchElementException("활동을 찾을 수 없습니다.");
+        } catch (AccessDeniedException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
-    public long uncheckActivity(long activityId){
+    public long uncheckActivity(long activityId, String email){
         try {
             Activity activity = activityRepository.findById(activityId)
                     .orElseThrow(() -> new NoSuchElementException("존재하지 않는 활동입니다."));
 
+            if(!activity.getUser().getEmail().equals(email)){
+                throw new AccessDeniedException("로그인한 유저와 활동의 유저가 다릅니다.");
+            }
             // 나머지 로직은 그대로 유지
             activity.uncheck();
             User user = activity.getUser();
@@ -96,15 +105,20 @@ public class ActivityService {
             return user.getWateringCount();
         } catch (NoSuchElementException e) {
             throw new IllegalArgumentException("활동을 찾을 수 없습니다.");
+        } catch (AccessDeniedException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
-    public void updateActivity(UpdateActivityReqDto updateActivityReqDto) {
+    public void updateActivity(UpdateActivityReqDto updateActivityReqDto, String email) {
         try{
             Activity activity = activityRepository.findById(updateActivityReqDto.getActivityId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 활동입니다."));
             if(activity.getActivityStatus().equals(ActivityStatus.DEFAULT)){
                 throw new IllegalStateException("ADD상태인 활동만 삭제가능합니다.");
+            }
+            if(!activity.getUser().getEmail().equals(email)){
+                throw new AccessDeniedException("로그인한 유저와 활동의 유저가 다릅니다.");
             }
             activity.update(updateActivityReqDto);
             activityRepository.save(activity);
@@ -116,15 +130,20 @@ public class ActivityService {
         }
     }
 
-    public void deleteActivity(long activityId){
+    public void deleteActivity(long activityId, String email){
         try{
             Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 활동입니다."));
             if(activity.getActivityStatus().equals(ActivityStatus.DEFAULT)){
                 throw new IllegalStateException("ADD상태인 활동만 삭제가능합니다.");
             }
+            if(!activity.getUser().getEmail().equals(email)){
+                throw new AccessDeniedException("로그인한 유저와 활동의 유저가 다릅니다.");
+            }
             activityRepository.deleteById(activityId);
         }catch (IllegalStateException e){
             throw new IllegalArgumentException("활동을 찾을 수 없습니다. ");
+        } catch (AccessDeniedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
