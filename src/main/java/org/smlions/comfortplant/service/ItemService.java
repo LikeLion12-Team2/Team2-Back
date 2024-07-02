@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.smlions.comfortplant.domain.entity.*;
+import org.smlions.comfortplant.dto.ItemDetailResDto;
 import org.smlions.comfortplant.dto.ItemReqDto;
 import org.smlions.comfortplant.dto.ItemResDto;
 import org.smlions.comfortplant.repository.ItemRepository;
@@ -54,8 +55,8 @@ public class ItemService {
         return itemResDtos;
     }
 
-    public void buyItem(ItemReqDto itemReqDto){
-//        User user = userRepository.findByEmail(itemReqDto.getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+    public void buyItem(ItemReqDto itemReqDto, String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         Item item = itemRepository.findById(itemReqDto.getItemId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
         Plant plant = plantRepository.findById(itemReqDto.getPlantId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
 
@@ -65,13 +66,13 @@ public class ItemService {
         } else if (item.getItemStatus().equals(ItemStatus.BACKGROUND)){
             plant.setColorItem(item.getName());
         }
-//        user.buyItem(item);
+        user.buyItem(item);
         plantRepository.save(plant);
     }
 
-    public ItemResDto getItem(long itemId){
+    public ItemDetailResDto getItem(long itemId){
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("아이템을 찾을 수 없습니다."));
 
-        return new ItemResDto().from(item);
+        return new ItemDetailResDto().from(item);
     }
 }
