@@ -23,10 +23,10 @@ public class WateringService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createWatering(CreateWateringRequestDTO createWateringRequestDTO){
+    public void createWatering(String email, CreateWateringRequestDTO createWateringRequestDTO){
 
         Optional<Plant> plant = plantRepository.findById(createWateringRequestDTO.getPlantId());
-        Optional<User> user = userRepository.findById(createWateringRequestDTO.getUserId());
+        Optional<User> user = userRepository.findByEmail(email);
 
         //wateringCount 횟수만큼 식물 경험치 증가
         plant.get().plusCurrentExp(user.get().getWateringCount());

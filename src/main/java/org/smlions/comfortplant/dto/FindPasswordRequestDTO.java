@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class FindPasswordRequestDTO {
     public String email;
+    public String newPassword;
 }

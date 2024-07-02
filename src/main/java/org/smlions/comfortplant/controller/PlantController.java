@@ -9,6 +9,8 @@ import org.smlions.comfortplant.dto.UserResponseDTO;
 import org.smlions.comfortplant.service.PlantService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -19,14 +21,14 @@ public class PlantController {
     private final PlantService plantService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createPlant(@RequestBody CreatePlantRequestDTO createPlantRequestDTO){
+    public ResponseEntity<?> createPlant(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CreatePlantRequestDTO createPlantRequestDTO){
         PlantResponseDTO plantResponseDTO = plantService.createPlant(createPlantRequestDTO);
         return new ResponseEntity<>(plantResponseDTO, HttpStatus.CREATED);
 
     }
 
     @GetMapping("/{plantId}")
-    public ResponseEntity<?> getPlant(@PathVariable Long plantId){
+    public ResponseEntity<?> getPlant(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long plantId){
         return ResponseEntity.ok(plantService.getPlant(plantId));
     }
 }

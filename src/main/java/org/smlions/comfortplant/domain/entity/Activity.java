@@ -31,7 +31,6 @@ public class Activity {
 
     // 유저 맵핑 부분 추가
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
     private User user;
 
     public void setUser(User user){

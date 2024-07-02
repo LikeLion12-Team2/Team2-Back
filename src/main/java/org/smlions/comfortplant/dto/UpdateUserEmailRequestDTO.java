@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class UpdateUserEmailRequestDTO {
-    public Long id;
+
     public String password;
     public String newEmail;
 

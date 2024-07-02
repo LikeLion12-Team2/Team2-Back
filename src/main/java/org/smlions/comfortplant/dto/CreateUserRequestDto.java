@@ -17,6 +17,7 @@ public class CreateUserRequestDto {
 
     public User toEntity(PasswordEncoder passwordEncoder) {
         String encodePassword = passwordEncoder.encode(password);
+
         return User.builder()
                 .nickname(nickname)
                 .password(password)

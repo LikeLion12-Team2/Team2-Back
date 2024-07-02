@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.smlions.comfortplant.domain.entity.User;
 import org.smlions.comfortplant.dto.*;
 import org.smlions.comfortplant.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final ActivityService activityService;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Transactional
     public UserResponseDTO createUser(CreateUserRequestDto createUserRequestDto){
 
@@ -36,16 +37,20 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long userId) {
-        log.info("[User Service] 유저 삭제하기 ID ---> {}", userId);
-        userRepository.deleteById(userId);
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        userRepository.delete(user);
     }
 
 
    @Transactional
-   public String findPassword(FindPasswordRequestDTO findPasswordRequestDTO){
+   public UserResponseDTO findPassword(FindPasswordRequestDTO findPasswordRequestDTO){
        User user = userRepository.findByEmail(findPasswordRequestDTO.getEmail()).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
-       return "Password : "+ user.getPassword();
+       user.updatePassword(passwordEncoder.encode(findPasswordRequestDTO.getNewPassword()));
+
+       return UserResponseDTO.from(user);
+
    }
     public UserResponseDTO getUserByEmail(String email){
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
@@ -63,21 +68,20 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDTO updateUserPassword(UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO) {
-        // 기존 비밀번호로 user 확인
+    public UserResponseDTO updateUserPassword(String email, UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO) {
+
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
 
-        User user = userRepository.findById(updateUserPasswordRequestDTO.getId()).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
-
-        if (!user.getPassword().equals(updateUserPasswordRequestDTO.getPassword())) {
+        if (!passwordEncoder.matches(updateUserPasswordRequestDTO.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        if (user.getPassword().equals(updateUserPasswordRequestDTO.getNewPassword())) {
+        if (passwordEncoder.matches(updateUserPasswordRequestDTO.getNewPassword(), user.getPassword())) {
             throw new IllegalArgumentException("기존 비밀번호와 일치합니다.");
         }
 
-        user.updatePassword(updateUserPasswordRequestDTO);
+        user.updatePassword(passwordEncoder.encode(updateUserPasswordRequestDTO.getNewPassword()));
 
         userRepository.save(user);
 
@@ -85,8 +89,8 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDTO updateUserNickname(UpdateUserNicknameRequestDTO updateUserNicknameRequestDTO) {
-        User user = userRepository.findById(updateUserNicknameRequestDTO.getId()).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+    public UserResponseDTO updateUserNickname(String email, UpdateUserNicknameRequestDTO updateUserNicknameRequestDTO) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         user.updateNickname(updateUserNicknameRequestDTO);
 
@@ -97,15 +101,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDTO updateUserEmail(UpdateUserEmailRequestDTO updateUserEmailRequestDTO){
+    public UserResponseDTO updateUserEmail(String email, UpdateUserEmailRequestDTO updateUserEmailRequestDTO){
 
         //인증 인가 구현 때 수정
-        User user = userRepository.findById(updateUserEmailRequestDTO.getId()).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
-        if (!user.getPassword().equals(updateUserEmailRequestDTO.getPassword())) {
+        if (!passwordEncoder.matches(updateUserEmailRequestDTO.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-
         user.updateEmail(updateUserEmailRequestDTO);
 
         userRepository.save(user);

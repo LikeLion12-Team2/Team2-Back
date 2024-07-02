@@ -11,7 +11,6 @@ import org.smlions.comfortplant.domain.entity.Watering;
 @AllArgsConstructor
 @Getter
 public class CreateWateringRequestDTO {
-    public Long userId;
     public Long plantId;
 
     public Watering toEntity() {
