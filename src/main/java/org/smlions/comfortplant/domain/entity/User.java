@@ -49,13 +49,17 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Activity> activities;
+
+
     public void buyItem(Item item){
         coin -= item.getPrice();
     }
 
 
-    public void updatePassword(UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
-        password= updateUserPasswordRequestDTO.getNewPassword();
+    public void updatePassword(String newPassword){
+        password= newPassword;
     }
 
     public void updateNickname(UpdateUserNicknameRequestDTO updateUserNicknameRequestDTO){

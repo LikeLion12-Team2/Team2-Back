@@ -14,12 +14,12 @@ import java.time.LocalDate;
 @Builder
 @Getter
 public class WateringAndDateResponseDTO {
-    public LocalDate data;
+    public LocalDate date;
     public Long wateringCount;
 
     public static WateringAndDateResponseDTO from(WateringAndDateData wateringAndDateData){
         return WateringAndDateResponseDTO.builder()
-                .data(wateringAndDateData.getData())
+                .date(wateringAndDateData.getData())
                 .wateringCount(wateringAndDateData.getTotalWatering())
                 .build();
     }

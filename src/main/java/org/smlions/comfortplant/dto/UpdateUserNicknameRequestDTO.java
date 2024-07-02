@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class UpdateUserNicknameRequestDTO {
-    public Long id;
+
     public String newNickname;
 }

@@ -6,6 +6,8 @@ import org.smlions.comfortplant.dto.*;
 import org.smlions.comfortplant.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -22,36 +24,37 @@ public class UserController {
     }
 
     @PutMapping("/updateUserEmail")
-    public ResponseEntity<?> updateUserEmail(@RequestBody UpdateUserEmailRequestDTO updateUserEmailRequestDTO){
-        UserResponseDTO userResponseDTO = userService.updateUserEmail(updateUserEmailRequestDTO);
+    public ResponseEntity<?> updateUserEmail(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateUserEmailRequestDTO updateUserEmailRequestDTO){
+        UserResponseDTO userResponseDTO = userService.updateUserEmail(userDetails.getUsername(), updateUserEmailRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body("이메일 변경이 완료되었습니다.");
     }
 
     @PutMapping("/updateUserNickname")
-    public ResponseEntity<?> updateUserNickname(@RequestBody UpdateUserNicknameRequestDTO updateUserNicknameRequestDTO){
-        UserResponseDTO userResponseDTO = userService.updateUserNickname(updateUserNicknameRequestDTO);
+    public ResponseEntity<?> updateUserNickname(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateUserNicknameRequestDTO updateUserNicknameRequestDTO){
+        UserResponseDTO userResponseDTO = userService.updateUserNickname(userDetails.getUsername(), updateUserNicknameRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body("닉네임 변경이 완료되었습니다.");
     }
 
     @PutMapping("/updateUserPassword")
-    public ResponseEntity<?> updateUserPassword(@RequestBody UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
-        UserResponseDTO userResponseDTO = userService.updateUserPassword(updateUserPasswordRequestDTO);
+    public ResponseEntity<?> updateUserPassword(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
+        UserResponseDTO userResponseDTO = userService.updateUserPassword(userDetails.getUsername(), updateUserPasswordRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body("비밀번호 변경이 완료되었습니다.");
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId){
-        userService.deleteUser(userId);
+    @DeleteMapping("")
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal UserDetails userDetails){
+        userService.deleteUser(userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 
 
-    @GetMapping("")
+    @GetMapping("/findpassword")
     public ResponseEntity<?> findPassword(@RequestBody FindPasswordRequestDTO findPasswordRequestDTO){
-        return ResponseEntity.ok(userService.findPassword(findPasswordRequestDTO));
+        UserResponseDTO userResponseDTO = userService.findPassword(findPasswordRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 재설정이 완료되었습니다.");
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("")
     public ResponseEntity<?> getUser(@PathVariable Long userId){
         return ResponseEntity.ok(userService.getUserByUserId(userId));
     }

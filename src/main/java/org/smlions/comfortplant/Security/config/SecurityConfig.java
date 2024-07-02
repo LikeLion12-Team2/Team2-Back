@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration // 빈 등록
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final String[] allowedUrls = {
             "/login", //로그인은 인증이 필요하지 않음
             "/api/user/create", //회원가입은 인증이 필요하지 않음
+            "/api/user/findpassword", //비밀번호 찾기는 인증이 필요하지 않음
             "/auth/reissue", //토큰 재발급은 인증이 필요하지 않음
             "/auth/**"
     };
@@ -76,11 +78,20 @@ public class SecurityConfig {
                         .requestMatchers(allowedUrls).permitAll()
                         .anyRequest().authenticated() // 그 외의 url 들은 인증이 필요함
                 );
-
+        http
+                .logout((configurer) ->
+                        configurer
+                                .logoutUrl("/logout")
+                                .deleteCookies("JSESSIONID")
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                );
 
         // Login Filter
         CustomLoginFilter loginFilter = new CustomLoginFilter(
                 authenticationManager(authenticationConfiguration), jwtUtil);
+
+
+
         // Login Filter URL 지정
         loginFilter.setFilterProcessesUrl("/login");
 

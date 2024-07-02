@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class UpdateUserPasswordRequestDTO {
-    public Long id;
+
 
     public String password;
     public String newPassword;

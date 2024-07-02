@@ -9,6 +9,8 @@ import org.smlions.comfortplant.service.PlantService;
 import org.smlions.comfortplant.service.WateringService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +26,10 @@ public class WateringController {
     private final PlantService plantService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createWatering(@RequestBody CreateWateringRequestDTO createWateringRequestDTO){
-        wateringService.createWatering(createWateringRequestDTO);
+    public ResponseEntity<?> createWatering(@AuthenticationPrincipal UserDetails userDetails,  @RequestBody CreateWateringRequestDTO createWateringRequestDTO){
+        wateringService.createWatering(userDetails.getUsername(), createWateringRequestDTO);
         PlantResponseDTO plantResponseDTO = plantService.getPlant(createWateringRequestDTO.getPlantId());
-        log.info("plantResponseDTO 찾았음");
+
         return new ResponseEntity<>(plantResponseDTO, HttpStatus.CREATED);
 
     }
