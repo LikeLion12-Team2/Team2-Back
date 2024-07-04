@@ -29,7 +29,7 @@ public class SecurityConfig {
 
     //인증이 필요하지 않은 url
     private final String[] allowedUrls = {
-            "/login", //로그인은 인증이 필요하지 않음
+            "/api/user/login", //로그인은 인증이 필요하지 않음
             "/api/user/create", //회원가입은 인증이 필요하지 않음
             "/api/user/findpassword", //비밀번호 찾기는 인증이 필요하지 않음
             "/auth/reissue", //토큰 재발급은 인증이 필요하지 않음
@@ -84,9 +84,10 @@ public class SecurityConfig {
         http
                 .logout((configurer) ->
                         configurer
-                                .logoutUrl("/logout")
+                                .logoutUrl("/api/user/logout")
                                 .deleteCookies("JSESSIONID")
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/api/user/logout"))
+
                 );
 
         // Login Filter
@@ -96,7 +97,7 @@ public class SecurityConfig {
 
 
         // Login Filter URL 지정
-        loginFilter.setFilterProcessesUrl("/login");
+        loginFilter.setFilterProcessesUrl("/api/user/login");
 
         // filter chain 에 login filter 등록
         http

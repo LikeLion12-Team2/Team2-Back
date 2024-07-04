@@ -63,6 +63,7 @@ public class UserService {
     }
 
     public UserResponseDTO getUserByUserId(Long id) {
+        log.info("여기까진 실행됨");
         User user = userRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
         return UserResponseDTO.from(user);
     }
