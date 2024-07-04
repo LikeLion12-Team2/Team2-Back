@@ -17,9 +17,3 @@
 ✨ feat: 로그인 개발 (#issue_number)
 ```
 
-### 3. 브랜치 전략
-```
-|-- main
-    |-- develop ✅ gitaction target
-        |-- feature/<# issue_number>
-```
