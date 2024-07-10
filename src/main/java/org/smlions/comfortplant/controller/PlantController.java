@@ -24,6 +24,7 @@ public class PlantController {
     private final PlantService plantService;
 
     @Operation(method = "POST", summary = "식물 생성", description = "식물 생성을 합니다. header에 accessToken과 body에는 식물의 Type(TREE, FLOWER)과 식물의 이름을 담아서 전송합니다.")
+    @PostMapping("/create")
     public ResponseEntity<?> createPlant(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CreatePlantRequestDTO createPlantRequestDTO){
         PlantResponseDTO plantResponseDTO = plantService.createPlant(createPlantRequestDTO);
         return new ResponseEntity<>(plantResponseDTO, HttpStatus.CREATED);
