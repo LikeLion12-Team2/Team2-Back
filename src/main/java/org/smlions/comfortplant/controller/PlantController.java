@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(originPatterns = "*" ,value = "*")
 @RequestMapping("/api/plant")
 @Tag(name = "식물 API", description = "식물 관련 API입니다.")
 public class PlantController {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(originPatterns = "*" ,value = "*")
 @RequestMapping("/api/shop")
 @Tag(name = "아이템 API", description = "아이템 관련 API입니다.")
 public class ItemController {
