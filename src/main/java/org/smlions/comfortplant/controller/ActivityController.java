@@ -16,6 +16,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(originPatterns = "*" ,value = "*")
 @RequestMapping("/api/activity")
 @Tag(name = "스트레스 해소 활동 API", description = "스트레스 해소 활동 관련 API입니다.")
 public class ActivityController {

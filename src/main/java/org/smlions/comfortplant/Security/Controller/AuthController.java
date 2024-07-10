@@ -7,14 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.smlions.comfortplant.Security.dto.JwtDto;
 import org.smlions.comfortplant.Security.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(originPatterns = "*" ,value = "*")
 @RequestMapping("/auth")
 @Tag(name = "토큰 발급 API", description = "토큰 발급 API입니다.")
 public class AuthController {
