@@ -69,6 +69,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByUserId(userId));
     }
 
+    @Operation(method = "GET", summary = "유저 코인 개수 조회", description = "유저의 코인 개수를 조회합니다. accessToken을 header에 담고, url parameter에 userId를 담아서 전송합니다.")
+    @GetMapping("/{userId}/coin")
+    public ResponseEntity<?> getCoin(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId){
+        UserResponseDTO userResponseDTO = userService.getUserByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body("코인 : " + userResponseDTO.getCoin());
+    }
+
     @Operation(method = "POST", summary = "로그인", description = "로그인합니다. email과 password를 body에 담아서 전송합니다.")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO){
