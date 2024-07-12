@@ -28,11 +28,11 @@ public class ItemService {
 
     public void initDefaultItems(){
         List<Item> defaultItems = Arrays.asList(
-                new Item(0, "빨간색", 40, "산뜻한 빨간색 식물의 집을 꾸며보세요.\n" +
+                new Item(0, "빨간색", 40, "산뜻한 빨간색 식물의 집을 꾸며보세요." +
                         "조금 더 화사해진 색이 분명 맘에 쏙 드실거에요.", ItemStatus.COLOR, null),
-                new Item(0, "파란색", 40, "산뜻한 파란색 식물의 집을 꾸며보세요.\n" +
+                new Item(0, "파란색", 40, "산뜻한 파란색 식물의 집을 꾸며보세요." +
                         "조금 더 화사해진 색이 분명 맘에 쏙 드실거에요.", ItemStatus.COLOR, null),
-                new Item(0, "태양", 40, "타오르는 태양을 식물에게 선물해주세요!\n", ItemStatus.BACKGROUND, null),
+                new Item(0, "태양", 40, "타오르는 태양을 식물에게 선물해주세요!", ItemStatus.BACKGROUND, null),
                 new Item(0, "창문", 40, "바람이 선선히 들어오는 창문", ItemStatus.BACKGROUND, null)
         );
         itemRepository.saveAll(defaultItems);
@@ -64,7 +64,7 @@ public class ItemService {
         if(item.getItemStatus().equals(ItemStatus.COLOR)){
             plant.setColorItem(item.getName());
         } else if (item.getItemStatus().equals(ItemStatus.BACKGROUND)){
-            plant.setColorItem(item.getName());
+            plant.setBackgroundItem(item.getName());
         }
         user.buyItem(item);
         plantRepository.save(plant);
