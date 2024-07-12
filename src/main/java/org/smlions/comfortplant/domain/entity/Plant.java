@@ -64,6 +64,12 @@ public class Plant {
     @OneToMany(mappedBy = "plant", cascade = CascadeType.ALL)
     private List<WateringAndDateData> wateringAndDateData;
 
+    public void CheckComplete() {
+        if (level == 10 && currentExp >= 20){
+            status = Status.Complete;
+        }
+    }
+
     public void setFirstTime(){
         currentExp = Long.valueOf(0);
         level = Long.valueOf(1);
