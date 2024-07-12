@@ -56,8 +56,8 @@ public class UserController {
     }
 
 
-    @Operation(method = "GET", summary = "비밀번호 찾기", description = "비밀번호를 재설정합니다. email과 체크된 newPassword를 body에 담아서 전송합니다.")
-    @GetMapping("/findpassword")
+    @Operation(method = "POST", summary = "비밀번호 찾기", description = "비밀번호를 재설정합니다. email과 체크된 newPassword를 body에 담아서 전송합니다.")
+    @PostMapping("/findpassword")
     public ResponseEntity<?> findPassword(@RequestBody FindPasswordRequestDTO findPasswordRequestDTO){
         UserResponseDTO userResponseDTO = userService.findPassword(findPasswordRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body("비밀번호 재설정이 완료되었습니다.");
