@@ -31,7 +31,7 @@ public class ActivityService {
     // 이 메소드는 UserService의 유저 생성 부분에 추가할 예정.
     public void addDefaultActivitiesToUser(User user){
         List<Activity> defaultActivities = Arrays.asList(
-                new Activity(0, "스트레스 해소 활동 목록", ActivityStatus.DEFAULT, false, user),
+                new Activity(0, "건강한 음식으로 식사하기", ActivityStatus.DEFAULT, false, user),
                 new Activity(0, "짧은 산책하기", ActivityStatus.DEFAULT, false, user),
                 new Activity(0, "숙면하기", ActivityStatus.DEFAULT, false, user),
                 new Activity(0, "명상하기", ActivityStatus.DEFAULT, false, user),
