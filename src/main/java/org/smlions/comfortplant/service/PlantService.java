@@ -2,23 +2,20 @@ package org.smlions.comfortplant.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.smlions.comfortplant.domain.entity.Plant;
-import org.smlions.comfortplant.domain.entity.Status;
-import org.smlions.comfortplant.domain.entity.User;
-import org.smlions.comfortplant.domain.entity.WateringAndDateData;
-import org.smlions.comfortplant.dto.CreatePlantRequestDTO;
-import org.smlions.comfortplant.dto.CreateUserRequestDto;
-import org.smlions.comfortplant.dto.PlantResponseDTO;
-import org.smlions.comfortplant.dto.UserResponseDTO;
+import org.smlions.comfortplant.domain.entity.*;
+import org.smlions.comfortplant.dto.*;
 import org.smlions.comfortplant.repository.PlantRepository;
+import org.smlions.comfortplant.repository.UserRepository;
 import org.smlions.comfortplant.repository.WateringAndDataRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,18 +24,39 @@ import java.util.Optional;
 public class PlantService {
     private final PlantRepository plantRepository;
     private final WateringAndDataRepository wateringAndDataRepository;
+    private final UserRepository userRepository;
     @Transactional
-    public PlantResponseDTO createPlant(CreatePlantRequestDTO createPlantRequestDTO){
+    public PlantResponseDTO createPlant(String email, CreatePlantRequestDTO createPlantRequestDTO){
+
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         Plant plant = createPlantRequestDTO.toEntity();
 
         plant.setFirstTime();
 
+        plant.setUser(user);
         plantRepository.save(plant);
 
         return PlantResponseDTO.from(plant);
 
     }
+
+
+
+    public List<PlantResponseDTO> getCompletePlants(Long userId) {
+        List<Plant> plants = plantRepository.findAllByUserId(userId);
+        List<PlantResponseDTO> plantResponseDTOList = new ArrayList<>();
+
+        for (Plant plant : plants) {
+            if (plant.getStatus().equals(Status.Complete)) {
+                plantResponseDTOList.add(PlantResponseDTO.from(plant));
+            }
+        }
+        return plantResponseDTOList;
+    }
+
+
+
 
     @Transactional
     public PlantResponseDTO getPlant(Long plantId){

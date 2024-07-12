@@ -31,6 +31,9 @@ public class WateringService {
         //wateringCount 횟수만큼 식물 경험치 증가
         plant.get().plusCurrentExp(user.get().getWateringCount());
 
+        //물주기를 했을 때 식물 경험치 및 레벨에 따라서 상태 변화
+        plant.get().CheckComplete();
+
         //wateringCount 횟수만큼 유저 코인 증가
         user.get().plusCoin(user.get().getWateringCount());
 
@@ -39,6 +42,7 @@ public class WateringService {
 
         //물주기를 할때마다 plant의 totalWateringCount 증가
         plant.get().plusTotalWateringCount(user.get().getWateringCount());
+
 
     }
 }
